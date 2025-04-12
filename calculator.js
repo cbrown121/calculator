@@ -43,49 +43,153 @@ let calValue1 = 0;
 let calValue2 = 0;
 let operation = '';
 let justEvaluated = false;
+let waitingForSecondNumber = false;
 
-container.addEventListener('click', (event) => {
+document.addEventListener("keydown", (event) => {
+    const value = event.key;
+
+    if (value === "Backspace" && display.textContent !== "0") {
+        display.textContent = display.textContent.slice(0, -1);
     
-    const isButton = event.target.nodeName === 'BUTTON';
-    if (!isButton) {
-      return;
+        // If nothing left, show "0"
+        if (display.textContent === "") {
+            display.textContent = "0";
+        }
     }
-    if (event.target.textContent === "C") { // if the user is selecting the clear button, replace everything with a 0
+    
+
+    // Prevent invalid "=" usage
+    if (value === "=" && !operation) return;
+
+    // Clear display on Escape or Backspace
+    if (value === "Escape" || value === "c") {
         display.textContent = "0";
-    } else if ((display.textContent === "0") && (event.target.id != ".")) { // if the display starts with a 0 and the next button is not a decimal, replace the 0
-        display.textContent = event.target.textContent;
-    } else if ((display.textContent.includes(".")) && (event.target.id === ".")) { //if the display already contains a decimal
-        // don't add to the display 
+        calValue1 = 0;
+        calValue2 = 0;
+        operation = '';
+        justEvaluated = false;
+        waitingForSecondNumber = false;
         return;
-    } else if (event.target.id === "+") {
+    }
+
+    // Prevent duplicate decimals
+    if (value === "." && display.textContent.includes(".")) return;
+
+    // Handle operations
+    if (["+", "-", "*", "/"].includes(value)) {
         calValue1 = parseFloat(display.textContent);
-        operation = add;
-        display.textContent = "0";
-    } else if (event.target.id === "-") {
-        calValue1 = parseFloat(display.textContent);
-        operation = subtract;
-        display.textContent = "0";
-    } else if (event.target.id === "X") {
-        calValue1 = parseFloat(display.textContent);
-        operation = multiply;
-        display.textContent = "0";
-    } else if (event.target.id === "/") {
-        calValue1 = parseFloat(display.textContent);
-        operation = divide;
-        display.textContent = "0";
-    } else if (event.target.id === "=") {
+        operation = getOperationFunction(value === "*" ? "X" : value);
+        waitingForSecondNumber = true;
+        return;
+    }
+
+    // Handle equals
+    if (value === "Enter" || value === "=") {
         calValue2 = parseFloat(display.textContent);
         display.textContent = operate(operation, calValue1, calValue2);
         justEvaluated = true;
-    } else {
-        if (justEvaluated === true) {
-            display.textContent = event.target.textContent;
-            justEvaluated = false;
-        } else {
-            display.textContent += event.target.textContent; // append the next number to the current number
-        }
+        return;
     }
-    console.log("Value 1: " + calValue1);
-    console.log("Operation: " + operation);
-    console.log("Value 2: " + calValue2)
+
+    // Allow only digits and decimal
+    if (!/[\d.]/.test(value)) return;
+
+    // Handle number/decimal input
+    if (justEvaluated) {
+        display.textContent = value;
+        justEvaluated = false;
+    } else if (waitingForSecondNumber) {
+        display.textContent = value;
+        waitingForSecondNumber = false;
+    } else if (display.textContent === "0" && value !== ".") {
+        display.textContent = value;
+    } else {
+        display.textContent += value;
+    }
+
+    console.log("Value 1:", calValue1);
+    console.log("Operation:", operation);
+    console.log("Value 2:", calValue2);
 });
+
+
+container.addEventListener('click', (event) => {
+
+    const value = event.target.textContent;
+    const id = event.target.id;
+
+    if (value === "Backspace" && display.textContent !== "0") {
+        display.textContent = display.textContent.slice(0, -1);
+    
+        // If nothing left, show "0"
+        if (display.textContent === "") {
+            display.textContent = "0";
+        }
+        return;
+    }
+
+    if (value === "=" && (!operation)) {
+        return;
+    }
+
+    // Clear display
+    if (value === "C") {
+        display.textContent = "0";
+        return;
+    }
+
+    // Prevent duplicate decimals
+    if (value === "." && display.textContent.includes(".")) {
+        return;
+    }
+
+    // Replace initial 0 with number
+    if (display.textContent === "0" && value !== ".") {
+        display.textContent = value;
+        return;
+    }
+
+    // Handle operations
+    if (["+", "-", "X", "/"].includes(id)) {
+        calValue1 = parseFloat(display.textContent);
+        operation = getOperationFunction(id);
+        waitingForSecondNumber = true;
+        return;
+    }
+
+    // Handle equals
+    if (id === "=") {
+        calValue2 = parseFloat(display.textContent);
+        display.textContent = operate(operation, calValue1, calValue2);
+        justEvaluated = true;
+        return;
+    }
+
+    // Handle number/decimal input
+    if (justEvaluated) {
+        display.textContent = value;
+        justEvaluated = false;
+    } else if (waitingForSecondNumber === true) {  
+        display.textContent = value;
+        waitingForSecondNumber = false;
+    } else if (display.textContent === "0" && value !== ".") {
+        display.textContent = value;
+    } else {
+        display.textContent += value;
+    }
+
+    console.log("Value 1:", calValue1);
+    console.log("Operation:", operation);
+    console.log("Value 2:", calValue2);
+});
+
+// Helper: Returns appropriate operation function
+function getOperationFunction(op) {
+    switch (op) {
+        case "+": return add;
+        case "-": return subtract;
+        case "X": return multiply;
+        case "/": return divide;
+        default: return () => 0;
+    }
+}
