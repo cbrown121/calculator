@@ -39,7 +39,13 @@ const container = document.getElementById("container");
 const display = document.querySelector(".display");
 
 
+let calValue1 = 0;
+let calValue2 = 0;
+let operation = '';
+let justEvaluated = false;
+
 container.addEventListener('click', (event) => {
+    
     const isButton = event.target.nodeName === 'BUTTON';
     if (!isButton) {
       return;
@@ -51,8 +57,35 @@ container.addEventListener('click', (event) => {
     } else if ((display.textContent.includes(".")) && (event.target.id === ".")) { //if the display already contains a decimal
         // don't add to the display 
         return;
+    } else if (event.target.id === "+") {
+        calValue1 = parseFloat(display.textContent);
+        operation = add;
+        display.textContent = "0";
+    } else if (event.target.id === "-") {
+        calValue1 = parseFloat(display.textContent);
+        operation = subtract;
+        display.textContent = "0";
+    } else if (event.target.id === "X") {
+        calValue1 = parseFloat(display.textContent);
+        operation = multiply;
+        display.textContent = "0";
+    } else if (event.target.id === "/") {
+        calValue1 = parseFloat(display.textContent);
+        operation = divide;
+        display.textContent = "0";
+    } else if (event.target.id === "=") {
+        calValue2 = parseFloat(display.textContent);
+        display.textContent = operate(operation, calValue1, calValue2);
+        justEvaluated = true;
     } else {
-        display.textContent += event.target.textContent; // append the next number to the current number
+        if (justEvaluated === true) {
+            display.textContent = event.target.textContent;
+            justEvaluated = false;
+        } else {
+            display.textContent += event.target.textContent; // append the next number to the current number
+        }
     }
-    console.dir(event.target.id);
+    console.log("Value 1: " + calValue1);
+    console.log("Operation: " + operation);
+    console.log("Value 2: " + calValue2)
 });
