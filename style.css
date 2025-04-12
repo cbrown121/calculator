@@ -1,0 +1,42 @@
+* {
+    font-family: 'Roboto', Courier, monospace;
+}
+
+.button {
+    height: 80px;
+    width: calc(100% / 4);
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: darkgray;
+}
+
+.button {
+    font-size: 20px;
+}
+
+.container {
+    background-color: black;
+    margin: -22px -8px -200px -8px;
+}
+
+.display {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin-right: 40px;
+    padding-top: 20px;
+    color: white;
+}
+
+.operator {
+     background-color: orange;
+     border-width: 1px;
+}
+
+.special {
+    background-color: darkgrey;
+    border-width: 1px;
+}

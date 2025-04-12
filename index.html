@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/calculator/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
-        <div id="container">
+        <div id="container" class="container">
             <h1 class="display">0</h1>
-            <button id="1" class="button">1</button>
-            <button id="2" class="button">2</button>
-            <button id="3" class="button">3</button>
-            <button id="4" class="button">4</button>
-            <button id="5" class="button">5</button>
-            <button id="6" class="button">6</button>
-            <button id="7" class="button">7</button>
-            <button id="8" class="button">8</button>
-            <button id="9" class="button">9</button>
-            <button id="0" class="button">0</button>
-            <button id="." class="button">.</button>
-            <button id="/" class="button">/</button>
-            <button id="X" class="button">X</button>
-            <button id="-" class="button">-</button>
-            <button id="+" class="button">+</button>
-            <button id="C" class="button">C</button>
-            <button id="=" class="button">=</button>
-            <button id="=" class="button">Backspace</button>
 
+            <div class="button-container">
+
+            
+                <button id="C" class="button special">C</button>
+                <button id="=" class="button special">Backspace</button>
+                <button id="." class="button special">.</button>
+                <button id="/" class="button operator">÷</button>
+                <button id="7" class="button number">7</button>
+                <button id="8" class="button number">8</button>
+                <button id="9" class="button number">9</button>
+                <button id="X" class="button operator">x</button>
+                <button id="4" class="button number">4</button>
+                <button id="5" class="button number">5</button>
+                <button id="6" class="button number">6</button>
+                <button id="-" class="button operator">-</button>
+                <button id="1" class="button number">1</button>
+                <button id="2" class="button number">2</button>
+                <button id="3" class="button number">3</button>
+                <button id="+" class="button operator">+</button>
+                <button id="0" class="button" class="number">0</button>
+                <button id="=" class="button" class="operator">=</button>
+            </div>
         </div>
     
     <script src="calculator.js"></script>
